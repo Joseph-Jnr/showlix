@@ -1,4 +1,4 @@
-import { MovieCard, SearchBar } from "@/components";
+import { MovieCard } from "@/components";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
@@ -38,12 +38,12 @@ export default function Index() {
         }}
         ListHeaderComponent={
           <>
-            <Image source={icons.logo} className="w-12 h-10 mb-5 mx-auto" />
+            <Image source={icons.logo} className="w-12 h-10 mb-10 mx-auto" />
 
-            <SearchBar
+            {/* <SearchBar
               onPress={() => router.push("/search")}
               placeholder="Search for a movie"
-            />
+            /> */}
 
             <Text className="text-lg text-white font-bold mt-5 mb-3">
               Latest Movies
@@ -59,7 +59,7 @@ export default function Index() {
               className="mt-10 self-center"
             />
           ) : moviesError ? (
-            <Text className="text-red-500">Error: {moviesError.message}</Text>
+            <Text className="text-red-500">Error: {moviesError?.message}</Text>
           ) : null
         }
       />
