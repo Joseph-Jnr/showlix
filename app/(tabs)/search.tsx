@@ -83,13 +83,22 @@ const Search = () => {
           ) : (
             <View className="mt-10 px-5">
               {searchQuery.trim() ? (
-                <Text className="text-center text-gray-500">
-                  No movies found
-                </Text>
+                <View className="flex flex-col gap-2">
+                  <Image
+                    source={images.noResult}
+                    className="w-32 h-32 mx-auto"
+                  />
+                  <Text className="text-center text-gray-500">
+                    No movies found
+                  </Text>
+                </View>
               ) : (
-                <Text className="text-center text-gray-500">
-                  Start typing to search
-                </Text>
+                <View className="flex flex-col gap-2">
+                  <Image source={images.search} className="w-32 h-32 mx-auto" />
+                  <Text className="text-center text-gray-500">
+                    Start typing to search
+                  </Text>
+                </View>
               )}
             </View>
           )
