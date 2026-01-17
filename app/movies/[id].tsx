@@ -37,7 +37,7 @@ const MovieInfo = ({
 
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
-  const { background, foreground, textLight } = useTheme();
+  const { background, foreground, textLight, backgroundCardBold } = useTheme();
 
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
 
@@ -60,20 +60,25 @@ const MovieDetails = () => {
           </Text>
 
           <View className="flex-row items-center gap-x-1 mt-2">
-            <Text className="text-light-200 text-sm">
+            <Text className="text-sm" style={{ color: textLight }}>
               {movie?.release_date?.split("-")[0]}
             </Text>
             <View className="w-1 h-1 bg-light-200 rounded-xl" />
-            <Text className="text-light-200 text-sm">{movie?.runtime}m</Text>
+            <Text className="text-sm" style={{ color: textLight }}>
+              {movie?.runtime}m
+            </Text>
           </View>
 
-          <View className="flex-row items-center bg-dark-100 px-2 py-1 rounded-md gap-x-1 mt-2">
+          <View
+            className="flex-row items-center px-2 py-1 rounded-md gap-x-1 mt-2"
+            style={{ backgroundColor: backgroundCardBold }}
+          >
             <Image source={icons.star} className="size-4" />
             <Text className="font-bold text-sm" style={{ color: foreground }}>
               {Math.round(movie?.vote_average ?? 0)}/10
             </Text>
 
-            <Text className="text-light-200 text-sm">
+            <Text className="text-sm" style={{ color: textLight }}>
               ({movie?.vote_count} votes)
             </Text>
           </View>

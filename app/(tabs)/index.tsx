@@ -15,6 +15,7 @@ export default function Index() {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
+    refetch,
   } = useFetch(() => fetchMovies({ query: "" }));
 
   return (
@@ -27,6 +28,8 @@ export default function Index() {
         numColumns={3}
         showsVerticalScrollIndicator={false}
         className="mt-2 pb-32"
+        refreshing={moviesLoading}
+        onRefresh={refetch}
         columnWrapperStyle={{
           justifyContent: "flex-start",
           gap: 20,
