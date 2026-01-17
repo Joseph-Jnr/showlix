@@ -1,4 +1,4 @@
-import { MovieCard } from "@/components";
+import { MovieCard, SearchBar } from "@/components";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
@@ -40,10 +40,10 @@ export default function Index() {
           <>
             <Image source={icons.logo} className="w-12 h-10 mb-10 mx-auto" />
 
-            {/* <SearchBar
+            <SearchBar
               onPress={() => router.push("/search")}
               placeholder="Search for a movie"
-            /> */}
+            />
 
             <Text className="text-lg text-white font-bold mt-5 mb-3">
               Latest Movies

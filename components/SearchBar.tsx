@@ -7,6 +7,7 @@ interface SearchBarProps {
   placeholder: string;
   onChangeText?: (text: string) => void;
   value?: string;
+  inputRef?: React.Ref<TextInput>;
 }
 
 const SearchBar = ({
@@ -14,6 +15,7 @@ const SearchBar = ({
   placeholder,
   onChangeText,
   value,
+  inputRef,
 }: SearchBarProps) => {
   const clearInput = () => {
     onChangeText?.("");
@@ -23,6 +25,7 @@ const SearchBar = ({
     <View className="flex flex-row items-center justify-between bg-dark-200 rounded-full px-5 py-4">
       <SearchNormal1 color="#ab8bff" size={20} />
       <TextInput
+        ref={inputRef}
         onFocus={onPress}
         placeholder={placeholder}
         value={value}
