@@ -2,7 +2,7 @@ import { icons } from "@/constants/icons";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Link } from "expo-router";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 
 const MovieCard = ({
   id,
@@ -14,7 +14,7 @@ const MovieCard = ({
   const { foreground } = useTheme();
   return (
     <Link href={`/movies/${id}`} asChild>
-      <TouchableOpacity className="w-[30%]">
+      <Pressable className="w-[30%]">
         <Image
           source={{
             uri: poster_path
@@ -50,7 +50,7 @@ const MovieCard = ({
             Movie
           </Text> */}
         </View>
-      </TouchableOpacity>
+      </Pressable>
     </Link>
   );
 };

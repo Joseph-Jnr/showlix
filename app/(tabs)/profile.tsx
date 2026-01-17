@@ -102,7 +102,7 @@ const ProfileHeader = ({ styles }: { styles: any }) => (
     {/* Profile Card */}
     <View
       className="flex-col items-center"
-      style={[styles.profileCard, { marginTop: 24 }]}
+      style={[styles.profileCard, { marginTop: 52 }]}
     >
       <View style={styles.avatarWrapper}>
         <Image
