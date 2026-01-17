@@ -1,9 +1,10 @@
-import { icons } from "@/constants/icons";
 import { router } from "expo-router";
 import {
+  ArrowLeft2,
   ArrowRight2,
   Card,
   FingerScan,
+  LogoutCurve,
   NotificationBing,
   Setting2,
   User,
@@ -24,7 +25,7 @@ const links = [
     key: "edit",
     title: "Edit profile",
     icon: User,
-    onPress: () => router.push("/"),
+    onPress: () => {},
   },
   { key: "payment", title: "Payment methods", icon: Card, onPress: () => {} },
   { key: "biometrics", title: "Biometrics", icon: FingerScan },
@@ -41,19 +42,33 @@ interface ProfileItemProps {
   title: string;
   icon: any;
   onPress?: () => void;
+  theme?: "default" | "logout";
   rightElement?: React.ReactNode;
+  hasVerticalPadding?: boolean;
 }
 
 const ProfileItem = ({
   title,
   icon: Icon,
   onPress,
+  theme = "default",
   rightElement,
+  hasVerticalPadding = true,
 }: ProfileItemProps) => (
-  <Pressable onPress={onPress} style={itemStyles.container}>
+  <Pressable
+    onPress={onPress}
+    style={[
+      itemStyles.container,
+      { paddingVertical: hasVerticalPadding ? 12 : 0 },
+    ]}
+  >
     <View style={itemStyles.left}>
-      <Icon size={20} color="#A8B5DB" />
-      <Text className="text-light-200 ml-3">{title}</Text>
+      <Icon size={20} color={theme === "default" ? "#A8B5DB" : "#e26262ff"} />
+      <Text
+        className={`${theme === "default" ? "text-light-200" : "text-red-400"} ml-3`}
+      >
+        {title}
+      </Text>
     </View>
     {rightElement}
   </Pressable>
@@ -64,11 +79,7 @@ const ProfileHeader = () => (
     {/* Header */}
     <View style={styles.header}>
       <Pressable onPress={router.back} style={styles.backButton}>
-        <Image
-          source={icons.arrow}
-          className="size-5 rotate-180"
-          tintColor="#fff"
-        />
+        <ArrowLeft2 size={20} color="#fff" />
       </Pressable>
 
       <Text className="text-light-200 text-2xl">Profile</Text>
@@ -124,20 +135,24 @@ const Profile = () => {
                         style={{ height: 20 }}
                       />
                     ) : (
-                      <ArrowRight2 size={20} color="#A8B5DB" />
+                      <ArrowRight2 size={18} color="#A8B5DB" />
                     )
                   }
                 />
-                {index < links.length - 1 && <View style={{ height: 32 }} />}
+                {index < links.length - 1 && <View style={{ height: 16 }} />}
               </View>
             ))}
           </View>
         )}
         ListFooterComponent={
           <View style={[styles.profileCard, { marginTop: 24 }]}>
-            <Pressable>
-              <Text className="text-red-300">Logout</Text>
-            </Pressable>
+            <ProfileItem
+              title="Logout"
+              theme="logout"
+              icon={LogoutCurve}
+              onPress={() => {}}
+              hasVerticalPadding={false}
+            />
           </View>
         }
       />

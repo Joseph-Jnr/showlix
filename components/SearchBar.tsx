@@ -1,6 +1,6 @@
-import { icons } from "@/constants/icons";
+import { SearchNormal1 } from "iconsax-react-nativejs";
 import React from "react";
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 interface SearchBarProps {
   onPress?: () => void;
@@ -21,12 +21,7 @@ const SearchBar = ({
 
   return (
     <View className="flex flex-row items-center justify-between bg-dark-200 rounded-full px-5 py-4">
-      <Image
-        source={icons.search}
-        className="size-5"
-        resizeMode="contain"
-        tintColor="#ab8bff"
-      />
+      <SearchNormal1 color="#ab8bff" size={20} />
       <TextInput
         onFocus={onPress}
         placeholder={placeholder}

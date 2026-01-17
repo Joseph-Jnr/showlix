@@ -1,6 +1,7 @@
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails } from "@/services/api";
 import { router, useLocalSearchParams } from "expo-router";
+import { ArrowLeft } from "iconsax-react-nativejs";
 import React from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import useFetch from "../../services/useFetch";
@@ -40,7 +41,7 @@ const MovieDetails = () => {
         </View>
 
         <View className="flex-col items-start justify-center mt-5 px-5">
-          <Text className="text-white text-xl font-bold">{movie?.title}</Text>
+          <Text className="text-white text-2xl font-bold">{movie?.title}</Text>
 
           <View className="flex-row items-center gap-x-1 mt-2">
             <Text className="text-light-200 text-sm">
@@ -95,12 +96,8 @@ const MovieDetails = () => {
         onPress={router.back}
         className="flex flex-row items-center justify-center absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-full py-3.5 z-50"
       >
-        <Image
-          source={icons.arrow}
-          className="size-5 mr-1 mt-0.5 rotate-180"
-          tintColor="#fff"
-        />
-        <Text className="text-white font-semibold text-base">Go back</Text>
+        <ArrowLeft size={20} color="#fff" />
+        <Text className="text-white font-semibold text-base ml-2">Go back</Text>
       </TouchableOpacity>
     </View>
   );
