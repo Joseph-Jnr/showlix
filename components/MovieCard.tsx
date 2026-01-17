@@ -1,4 +1,5 @@
 import { icons } from "@/constants/icons";
+import { useTheme } from "@/theme/ThemeProvider";
 import { Link } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -10,6 +11,7 @@ const MovieCard = ({
   vote_average,
   release_date,
 }: Movie) => {
+  const { foreground } = useTheme();
   return (
     <Link href={`/movies/${id}`} asChild>
       <TouchableOpacity className="w-[30%]">
@@ -23,14 +25,18 @@ const MovieCard = ({
           resizeMode="cover"
         />
 
-        <Text className="text-sm text-white font-bold mt-2" numberOfLines={1}>
+        <Text
+          className="text-sm font-bold mt-2"
+          style={{ color: foreground }}
+          numberOfLines={1}
+        >
           {title}
         </Text>
 
         {/* Rating */}
         <View className="flex-row items-center justify-start gap-x-1">
           <Image source={icons.star} className="size-4" />
-          <Text className="text-xs text-white font-bold">
+          <Text className="text-xs font-bold" style={{ color: foreground }}>
             {Math.round(vote_average / 2)}
           </Text>
         </View>

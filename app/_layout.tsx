@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/theme";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -19,12 +20,12 @@ export default function RootLayout() {
     prepareApp();
   }, []);
   return (
-    <>
+    <ThemeProvider>
       <StatusBar hidden={true} />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="movies/[id]" options={{ headerShown: false }} />
       </Stack>
-    </>
+    </ThemeProvider>
   );
 }

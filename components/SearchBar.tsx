@@ -1,3 +1,4 @@
+import { useTheme } from "@/theme/ThemeProvider";
 import { SearchNormal1 } from "iconsax-react-nativejs";
 import React from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -17,12 +18,17 @@ const SearchBar = ({
   value,
   inputRef,
 }: SearchBarProps) => {
+  const { foreground, icon, bgCard } = useTheme();
+
   const clearInput = () => {
     onChangeText?.("");
   };
 
   return (
-    <View className="flex flex-row items-center justify-between bg-dark-200 rounded-full px-5 py-4">
+    <View
+      className="flex flex-row items-center justify-between rounded-full px-5 py-4"
+      style={{ backgroundColor: bgCard }}
+    >
       <SearchNormal1 color="#ab8bff" size={20} />
       <TextInput
         ref={inputRef}
@@ -31,7 +37,8 @@ const SearchBar = ({
         value={value}
         onChangeText={onChangeText}
         placeholderTextColor="#a8b5db"
-        className="flex-1 ml-2 text-white"
+        className="flex-1 ml-2"
+        style={{ color: foreground }}
       />
 
       {!!value && (
@@ -39,7 +46,9 @@ const SearchBar = ({
           className="w-10 h-10 flex flex-row items-center justify-center rounded"
           onPress={clearInput}
         >
-          <Text className="text-gray-500 text-lg">✕</Text>
+          <Text className="text-lg" style={{ color: icon }}>
+            ✕
+          </Text>
         </TouchableOpacity>
       )}
     </View>

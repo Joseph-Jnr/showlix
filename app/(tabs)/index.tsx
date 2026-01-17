@@ -3,11 +3,13 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import useFetch from "@/services/useFetch";
+import { useTheme } from "@/theme/ThemeProvider";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
+  const { background, foreground } = useTheme();
 
   const {
     data: movies,
@@ -16,7 +18,7 @@ export default function Index() {
   } = useFetch(() => fetchMovies({ query: "" }));
 
   return (
-    <View className="flex-1 bg-primary">
+    <View className="flex-1" style={{ backgroundColor: background }}>
       <Image source={images.bg} className="absolute w-full z-0" />
 
       <FlatList
@@ -45,7 +47,10 @@ export default function Index() {
               placeholder="Search for a movie"
             />
 
-            <Text className="text-lg text-white font-bold mt-5 mb-3">
+            <Text
+              className="text-lg font-bold mt-5 mb-3"
+              style={{ color: foreground }}
+            >
               Latest Movies
             </Text>
           </>

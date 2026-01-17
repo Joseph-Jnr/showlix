@@ -1,3 +1,5 @@
+import { useAppTheme } from "@/hooks";
+import { useTheme } from "@/theme/ThemeProvider";
 import { router } from "expo-router";
 import {
   ArrowLeft2,
@@ -5,6 +7,7 @@ import {
   Card,
   FingerScan,
   LogoutCurve,
+  Moon,
   NotificationBing,
   Setting2,
   User,
@@ -29,6 +32,7 @@ const links = [
   },
   { key: "payment", title: "Payment methods", icon: Card, onPress: () => {} },
   { key: "biometrics", title: "Biometrics", icon: FingerScan },
+  { key: "theme", title: "Dark mode", icon: Moon },
   { key: "settings", title: "Settings", icon: Setting2, onPress: () => {} },
   {
     key: "notifications",
@@ -45,6 +49,7 @@ interface ProfileItemProps {
   theme?: "default" | "logout";
   rightElement?: React.ReactNode;
   hasVerticalPadding?: boolean;
+  color?: string;
 }
 
 const ProfileItem = ({
@@ -54,6 +59,7 @@ const ProfileItem = ({
   theme = "default",
   rightElement,
   hasVerticalPadding = true,
+  color,
 }: ProfileItemProps) => (
   <Pressable
     onPress={onPress}
@@ -63,9 +69,12 @@ const ProfileItem = ({
     ]}
   >
     <View style={itemStyles.left}>
-      <Icon size={20} color={theme === "default" ? "#A8B5DB" : "#e26262ff"} />
+      <Icon size={20} color={theme === "default" ? `${color}` : "#e26262ff"} />
       <Text
-        className={`${theme === "default" ? "text-light-200" : "text-red-400"} ml-3`}
+        style={{
+          color: theme === "default" ? `${color}` : "#e26262ff",
+          marginLeft: 8,
+        }}
       >
         {title}
       </Text>
@@ -74,15 +83,20 @@ const ProfileItem = ({
   </Pressable>
 );
 
-const ProfileHeader = () => (
+const ProfileHeader = ({ styles }: { styles: any }) => (
   <>
     {/* Header */}
     <View style={styles.header}>
       <Pressable onPress={router.back} style={styles.backButton}>
-        <ArrowLeft2 size={20} color="#fff" />
+        <ArrowLeft2 size={20} color={styles.backButtonIcon.color} />
       </Pressable>
 
-      <Text className="text-light-200 text-2xl">Profile</Text>
+      <Text
+        className="text-2xl font-medium"
+        style={{ color: styles.backButtonIcon.color }}
+      >
+        Profile
+      </Text>
     </View>
 
     {/* Profile Card */}
@@ -100,23 +114,35 @@ const ProfileHeader = () => (
         />
       </View>
 
-      <Text className="text-light-200 text-2xl font-bold mt-5">Joseph Jnr</Text>
-      <Text className="text-light-200">jojo@gmail.com</Text>
+      <Text
+        style={{ color: styles.backButtonIcon.color }}
+        className="text-2xl font-bold mt-5"
+      >
+        Joseph Jnr
+      </Text>
+      <Text style={{ color: styles.backButtonIcon.color }}>jojo@gmail.com</Text>
     </View>
   </>
 );
 
 const Profile = () => {
+  const { isDarkMode, setAppTheme } = useAppTheme();
+
   const [biometricsEnabled, setBiometricsEnabled] = useState(false);
   const SCREEN_SECTIONS = [{ type: "profile-actions" }];
+  const { background, bgCard, foreground, icon } = useTheme();
+  const styles = React.useMemo(
+    () => createStyles(bgCard, icon),
+    [bgCard, icon],
+  );
 
   return (
-    <View className="bg-primary flex-1">
+    <View className="flex-1" style={{ backgroundColor: background }}>
       <FlatList
         data={SCREEN_SECTIONS}
         keyExtractor={(item) => item.type}
         contentContainerStyle={styles.listContent}
-        ListHeaderComponent={<ProfileHeader />}
+        ListHeaderComponent={<ProfileHeader styles={styles} />}
         renderItem={() => (
           <View style={[styles.profileCard, { marginTop: 24 }]}>
             {links.map((item, index) => (
@@ -125,17 +151,34 @@ const Profile = () => {
                   title={item.title}
                   icon={item.icon}
                   onPress={item.onPress}
+                  color={foreground}
                   rightElement={
                     item.key === "biometrics" ? (
                       <Switch
                         value={biometricsEnabled}
                         onValueChange={setBiometricsEnabled}
                         thumbColor={biometricsEnabled ? "#AB8BFF" : "#A8B5DB"}
-                        trackColor={{ false: "#221F3D", true: "#221F3D" }}
+                        trackColor={{
+                          false: isDarkMode ? "#221F3D" : "#d6d5e1ff",
+                          true: isDarkMode ? "#221F3D" : "#d6d5e1ff",
+                        }}
+                        style={{ height: 20 }}
+                      />
+                    ) : item.key === "theme" ? (
+                      <Switch
+                        value={isDarkMode}
+                        onValueChange={(value) =>
+                          setAppTheme(value ? "dark" : "light")
+                        }
+                        thumbColor={isDarkMode ? "#AB8BFF" : "#A8B5DB"}
+                        trackColor={{
+                          false: "#d6d5e1ff",
+                          true: "#221F3D",
+                        }}
                         style={{ height: 20 }}
                       />
                     ) : (
-                      <ArrowRight2 size={18} color="#A8B5DB" />
+                      <ArrowRight2 size={18} color={foreground} />
                     )
                   }
                 />
@@ -162,42 +205,46 @@ const Profile = () => {
 
 export default Profile;
 
-const styles = StyleSheet.create({
-  listContent: {
-    paddingBottom: 120,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 80,
-    paddingHorizontal: 20,
-  },
-  backButton: {
-    position: "absolute",
-    left: 20,
-    backgroundColor: "#0f0d23",
-    padding: 16,
-    borderRadius: 50,
-  },
-  profileCard: {
-    backgroundColor: "#0f0d23",
-    padding: 20,
-    borderRadius: 20,
-    marginHorizontal: 20,
-  },
-  avatarWrapper: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    overflow: "hidden",
-    alignSelf: "center",
-  },
-  avatar: {
-    width: "100%",
-    height: "100%",
-  },
-});
+const createStyles = (bgCard: string, icon: string) =>
+  StyleSheet.create({
+    listContent: {
+      paddingBottom: 120,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 80,
+      paddingHorizontal: 20,
+    },
+    backButton: {
+      position: "absolute",
+      left: 20,
+      backgroundColor: bgCard,
+      padding: 16,
+      borderRadius: 50,
+    },
+    backButtonIcon: {
+      color: icon,
+    },
+    profileCard: {
+      backgroundColor: bgCard,
+      padding: 20,
+      borderRadius: 20,
+      marginHorizontal: 20,
+    },
+    avatarWrapper: {
+      width: 96,
+      height: 96,
+      borderRadius: 48,
+      overflow: "hidden",
+      alignSelf: "center",
+    },
+    avatar: {
+      width: "100%",
+      height: "100%",
+    },
+  });
 
 const itemStyles = StyleSheet.create({
   container: {

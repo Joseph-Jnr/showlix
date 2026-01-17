@@ -1,4 +1,5 @@
 import { images } from "@/constants/images";
+import { useTheme } from "@/theme/ThemeProvider";
 import { Tabs } from "expo-router";
 import { Home2, Save2, SearchNormal1, User } from "iconsax-react-nativejs";
 import React from "react";
@@ -8,9 +9,10 @@ interface TabIconProps {
   focused: boolean;
   icon: any;
   title: string;
+  iconColor: string;
 }
 
-const TabIcon = ({ focused, icon: Icon, title }: TabIconProps) => {
+const TabIcon = ({ focused, icon: Icon, title, iconColor }: TabIconProps) => {
   if (focused) {
     return (
       <ImageBackground
@@ -27,12 +29,14 @@ const TabIcon = ({ focused, icon: Icon, title }: TabIconProps) => {
 
   return (
     <View className="size-full justify-center items-center mt-4 rounded-full">
-      <Icon color="#A8B5DB" size={20} />
+      <Icon color={iconColor} size={20} />
     </View>
   );
 };
 
-const _layout = () => {
+const TabLayout = () => {
+  const { tabBarBackground, icon } = useTheme();
+
   return (
     <Tabs
       screenOptions={{
@@ -44,7 +48,7 @@ const _layout = () => {
           alignItems: "center",
         },
         tabBarStyle: {
-          backgroundColor: "#0f0d23",
+          backgroundColor: tabBarBackground,
           borderRadius: 50,
           marginHorizontal: 20,
           marginBottom: 36,
@@ -53,7 +57,15 @@ const _layout = () => {
           overflow: "hidden",
           borderWidth: 1,
           paddingHorizontal: 6,
-          borderColor: "#0f0d23",
+          borderColor: tabBarBackground,
+          shadowColor: "#00000077",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
         },
       }}
     >
@@ -63,7 +75,12 @@ const _layout = () => {
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={Home2} title="Home" />
+            <TabIcon
+              iconColor={icon}
+              focused={focused}
+              icon={Home2}
+              title="Home"
+            />
           ),
         }}
       />
@@ -73,7 +90,12 @@ const _layout = () => {
           title: "Search",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={SearchNormal1} title="Search" />
+            <TabIcon
+              iconColor={icon}
+              focused={focused}
+              icon={SearchNormal1}
+              title="Search"
+            />
           ),
         }}
       />
@@ -83,7 +105,12 @@ const _layout = () => {
           title: "Saved",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={Save2} title="Saved" />
+            <TabIcon
+              iconColor={icon}
+              focused={focused}
+              icon={Save2}
+              title="Saved"
+            />
           ),
         }}
       />
@@ -93,7 +120,12 @@ const _layout = () => {
           title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={User} title="Profile" />
+            <TabIcon
+              iconColor={icon}
+              focused={focused}
+              icon={User}
+              title="Profile"
+            />
           ),
         }}
       />
@@ -101,4 +133,4 @@ const _layout = () => {
   );
 };
 
-export default _layout;
+export default TabLayout;

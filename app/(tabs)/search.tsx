@@ -3,6 +3,7 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import useFetch from "@/services/useFetch";
+import { useTheme } from "@/theme/ThemeProvider";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -17,6 +18,8 @@ import {
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<TextInput>(null);
+
+  const { background, foreground } = useTheme();
 
   useFocusEffect(
     useCallback(() => {
@@ -49,7 +52,7 @@ const Search = () => {
   }, [searchQuery]);
 
   return (
-    <View className="flex-1 bg-primary">
+    <View className="flex-1" style={{ backgroundColor: background }}>
       <Image
         source={images.bg}
         className="flex-1 absolute w-full z-0"
@@ -86,7 +89,7 @@ const Search = () => {
             </View>
 
             {!loading && !error && searchQuery.trim() && movies?.length > 0 && (
-              <Text className="text-xl text-white font-bold">
+              <Text className="text-xl font-bold" style={{ color: foreground }}>
                 Search results for{" "}
                 <Text className="text-accent">{searchQuery}</Text>
               </Text>
