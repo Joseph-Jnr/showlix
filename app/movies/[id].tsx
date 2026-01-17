@@ -14,7 +14,7 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => {
   return (
     <View className="flex-col items-start justify-center mt-5">
       <Text className="text-light-200 text-sm font-normal">{label}</Text>
-      <Text className="text-light-100 text-sm font-bold mt-2">
+      <Text className="text-light-100 text-base font-normal mt-2">
         {value || "N/A"}
       </Text>
     </View>
@@ -93,7 +93,7 @@ const MovieDetails = () => {
 
       <TouchableOpacity
         onPress={router.back}
-        className="flex flex-row items-center justify-center absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 z-50"
+        className="flex flex-row items-center justify-center absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-full py-3.5 z-50"
       >
         <Image
           source={icons.arrow}
