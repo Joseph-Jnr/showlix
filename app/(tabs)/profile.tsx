@@ -157,7 +157,7 @@ const Profile = () => {
                       <Switch
                         value={biometricsEnabled}
                         onValueChange={setBiometricsEnabled}
-                        thumbColor={biometricsEnabled ? "#AB8BFF" : "#A8B5DB"}
+                        thumbColor={biometricsEnabled ? "#ef3939ff" : "#A8B5DB"}
                         trackColor={{
                           false: isDarkMode ? "#221F3D" : "#d6d5e1ff",
                           true: isDarkMode ? "#221F3D" : "#d6d5e1ff",
@@ -170,7 +170,7 @@ const Profile = () => {
                         onValueChange={(value) =>
                           setAppTheme(value ? "dark" : "light")
                         }
-                        thumbColor={isDarkMode ? "#AB8BFF" : "#A8B5DB"}
+                        thumbColor={isDarkMode ? "#ef3939ff" : "#A8B5DB"}
                         trackColor={{
                           false: "#d6d5e1ff",
                           true: "#221F3D",

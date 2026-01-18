@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MovieApp",
-    "slug": "movie_app",
+    "name": "Showlix",
+    "slug": "showlix",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons/logo.png",

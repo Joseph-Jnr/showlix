@@ -29,7 +29,7 @@ const SearchBar = ({
       className="flex flex-row items-center justify-between rounded-full px-5 py-4"
       style={{ backgroundColor: bgCard }}
     >
-      <SearchNormal1 color="#ab8bff" size={20} />
+      <SearchNormal1 color="#de2626ff" size={20} />
       <TextInput
         ref={inputRef}
         onFocus={onPress}

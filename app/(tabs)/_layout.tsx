@@ -1,15 +1,14 @@
+import { useTheme } from "@/theme/ThemeProvider";
+import { LinearGradient } from "expo-linear-gradient";
 import { Tabs, useSegments } from "expo-router";
 import { Home2, Save2, SearchNormal1, User } from "iconsax-react-nativejs";
 import React, { useEffect } from "react";
-import { Dimensions, ImageBackground, Text, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-
-import { images } from "@/constants/images";
-import { useTheme } from "@/theme/ThemeProvider";
 
 const { width } = Dimensions.get("window");
 
@@ -37,8 +36,8 @@ const TabIcon = ({ focused, icon: Icon, title, iconColor }: TabIconProps) => {
   if (focused) {
     return (
       <View className="flex flex-row w-full flex-1 min-w-[80px] min-h-12 mt-4 justify-center items-center">
-        <Icon color="#151312" size={20} />
-        <Text className="text-secondary text-base font-semibold ml-2">
+        <Icon color="#eef2f6" size={20} />
+        <Text className="text-[#eef2f6] text-base font-semibold ml-2">
           {title}
         </Text>
       </View>
@@ -114,10 +113,13 @@ const TabLayout = () => {
                 indicatorStyle,
               ]}
             >
-              <ImageBackground
-                source={images.highlight}
-                className="flex-1"
-                resizeMode="stretch"
+              <LinearGradient
+                colors={["#de2626ff", "#d2211aff", "#8B0000"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{
+                  flex: 1,
+                }}
               />
             </Animated.View>
           </View>
