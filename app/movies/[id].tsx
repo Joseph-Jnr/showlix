@@ -1,3 +1,4 @@
+import { AuthModal } from "@/components";
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails } from "@/services/api";
 import { useSavedMovies } from "@/store";
@@ -6,7 +7,7 @@ import { BlurView } from "expo-blur";
 import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowLeft, Play, Save2 } from "iconsax-react-nativejs";
-import React from "react";
+import React, { useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -48,6 +49,7 @@ const MovieDetails = () => {
   const { id } = useLocalSearchParams();
   const { background, foreground, textLight, backgroundCardBold } = useTheme();
   const { addMovie, removeMovie, savedMovies } = useSavedMovies();
+  const [modalActive, setModalActive] = useState(false);
 
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
   const saved = !!movie && savedMovies.some((m) => m.id === movie.id);
@@ -67,6 +69,7 @@ const MovieDetails = () => {
         id: movie.id,
         title: movie.title,
         poster_path: movie.poster_path,
+        vote_average: movie.vote_average,
         release_date: movie.release_date,
       });
       showUndoToast("saved");
@@ -119,7 +122,10 @@ const MovieDetails = () => {
             resizeMode="stretch"
           />
 
-          <Pressable className="absolute inset-0 items-center justify-center">
+          <Pressable
+            className="absolute inset-0 items-center justify-center"
+            onPress={() => setModalActive(true)}
+          >
             <View className="w-18 h-18 p-2 rounded-xl bg-black/50 items-center justify-center">
               <Play size={50} color="#fff" />
             </View>
@@ -233,6 +239,8 @@ const MovieDetails = () => {
         <ArrowLeft size={20} color="#fff" />
         <Text className="text-white font-semibold text-base ml-2">Go back</Text>
       </Pressable>
+
+      <AuthModal modalActive={modalActive} setModalActive={setModalActive} />
     </View>
   );
 };
