@@ -1,9 +1,30 @@
+import { Tabs, useSegments } from "expo-router";
+import { Home2, Save2, SearchNormal1, User } from "iconsax-react-nativejs";
+import React, { useEffect } from "react";
+import { Dimensions, ImageBackground, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
 import { images } from "@/constants/images";
 import { useTheme } from "@/theme/ThemeProvider";
-import { Tabs } from "expo-router";
-import { Home2, Save2, SearchNormal1, User } from "iconsax-react-nativejs";
-import React from "react";
-import { ImageBackground, Text, View } from "react-native";
+
+const { width } = Dimensions.get("window");
+
+const TAB_COUNT = 4;
+const H_PADDING = 20;
+const TAB_BAR_HORIZONTAL_PADDING = 10;
+const TAB_BAR_WIDTH = width - H_PADDING * 2 - TAB_BAR_HORIZONTAL_PADDING;
+const TAB_WIDTH = TAB_BAR_WIDTH / TAB_COUNT;
+
+const ROUTE_INDEX: Record<string, number> = {
+  index: 0,
+  search: 1,
+  saved: 2,
+  profile: 3,
+};
 
 interface TabIconProps {
   focused: boolean;
@@ -15,15 +36,12 @@ interface TabIconProps {
 const TabIcon = ({ focused, icon: Icon, title, iconColor }: TabIconProps) => {
   if (focused) {
     return (
-      <ImageBackground
-        source={images.highlight}
-        className="flex flex-row w-full flex-1 min-w-[80px] min-h-12 mt-4 justify-center items-center rounded-full overflow-hidden"
-      >
+      <View className="flex flex-row w-full flex-1 min-w-[80px] min-h-12 mt-4 justify-center items-center">
         <Icon color="#151312" size={20} />
         <Text className="text-secondary text-base font-semibold ml-2">
           {title}
         </Text>
-      </ImageBackground>
+      </View>
     );
   }
 
@@ -36,13 +54,31 @@ const TabIcon = ({ focused, icon: Icon, title, iconColor }: TabIconProps) => {
 
 const TabLayout = () => {
   const { tabBarBackground, icon } = useTheme();
+  const segments = useSegments();
+
+  const translateX = useSharedValue(0);
+
+  useEffect(() => {
+    const current = segments[segments.length - 1];
+    const index = ROUTE_INDEX[current] ?? 0;
+
+    translateX.value = withSpring(index * TAB_WIDTH, {
+      damping: 18,
+      stiffness: 160,
+      mass: 0.9,
+    });
+  }, [segments]);
+
+  const indicatorStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
 
   return (
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
         tabBarItemStyle: {
-          width: "100%",
+          width: TAB_WIDTH,
           height: "100%",
           justifyContent: "center",
           alignItems: "center",
@@ -59,72 +95,90 @@ const TabLayout = () => {
           paddingHorizontal: 6,
           borderColor: tabBarBackground,
           shadowColor: "#00000077",
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
+          shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
           elevation: 5,
         },
+        tabBarBackground: () => (
+          <View className="absolute inset-0 flex-row items-center">
+            <Animated.View
+              style={[
+                {
+                  width: TAB_WIDTH,
+                  height: 48,
+                  marginLeft: 4,
+                  borderRadius: 999,
+                  overflow: "hidden",
+                },
+                indicatorStyle,
+              ]}
+            >
+              <ImageBackground
+                source={images.highlight}
+                className="flex-1"
+                resizeMode="stretch"
+              />
+            </Animated.View>
+          </View>
+        ),
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
-              iconColor={icon}
               focused={focused}
               icon={Home2}
               title="Home"
+              iconColor={icon}
             />
           ),
         }}
       />
+
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
-              iconColor={icon}
               focused={focused}
               icon={SearchNormal1}
               title="Search"
+              iconColor={icon}
             />
           ),
         }}
       />
+
       <Tabs.Screen
         name="saved"
         options={{
-          title: "Saved",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
-              iconColor={icon}
               focused={focused}
               icon={Save2}
               title="Saved"
+              iconColor={icon}
             />
           ),
         }}
       />
+
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon
-              iconColor={icon}
               focused={focused}
               icon={User}
               title="Profile"
+              iconColor={icon}
             />
           ),
         }}

@@ -1,7 +1,7 @@
 import { useTheme } from "@/theme/ThemeProvider";
 import { SearchNormal1 } from "iconsax-react-nativejs";
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 interface SearchBarProps {
   onPress?: () => void;
@@ -42,14 +42,14 @@ const SearchBar = ({
       />
 
       {!!value && (
-        <TouchableOpacity
+        <Pressable
           className="w-10 h-10 flex flex-row items-center justify-center rounded"
           onPress={clearInput}
         >
           <Text className="text-lg" style={{ color: icon }}>
             ✕
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );
