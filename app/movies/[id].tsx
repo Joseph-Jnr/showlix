@@ -1,11 +1,19 @@
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails } from "@/services/api";
+import { useSavedMovies } from "@/store";
 import { useTheme } from "@/theme/ThemeProvider";
 import { BlurView } from "expo-blur";
+import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowLeft, Play, Save2 } from "iconsax-react-nativejs";
-import React, { useState } from "react";
+import React from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+import Toast from "react-native-toast-message";
 import useFetch from "../../services/useFetch";
 
 interface MovieInfoProps {
@@ -39,13 +47,65 @@ const MovieInfo = ({
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
   const { background, foreground, textLight, backgroundCardBold } = useTheme();
-  const [isSaved, setIsSaved] = useState(false);
+  const { addMovie, removeMovie, savedMovies } = useSavedMovies();
 
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
+  const saved = !!movie && savedMovies.some((m) => m.id === movie.id);
 
   const saveMovie = () => {
-    setIsSaved(!isSaved);
+    if (!movie) return;
+
+    scale.value = withSpring(1.06, {}, () => {
+      scale.value = withSpring(1);
+    });
+
+    if (saved) {
+      removeMovie(movie.id);
+      showUndoToast("removed");
+    } else {
+      addMovie({
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+      });
+      showUndoToast("saved");
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
   };
+
+  const showUndoToast = (action: "saved" | "removed") => {
+    Toast.show({
+      type: "info",
+      position: "top",
+      text1:
+        action === "saved"
+          ? "Saved to Watch later"
+          : "Removed from Watch later",
+      autoHide: true,
+      visibilityTime: 4000,
+      onPress: () => {
+        if (!movie) return;
+
+        if (action === "saved") {
+          removeMovie(movie.id);
+        } else {
+          addMovie({
+            id: movie.id,
+            title: movie.title,
+            poster_path: movie?.poster_path,
+            release_date: movie?.release_date,
+          });
+        }
+      },
+    });
+  };
+
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   return (
     <View className="flex-1" style={{ backgroundColor: background }}>
@@ -102,22 +162,24 @@ const MovieDetails = () => {
               className="rounded-2xl overflow-hidden"
               style={{ paddingHorizontal: 16, paddingVertical: 8 }}
             >
-              <Pressable
-                onPress={saveMovie}
-                className="flex-row items-center justify-center"
-              >
-                <Save2
-                  size={20}
-                  color={foreground}
-                  variant={isSaved ? "Bold" : "Linear"}
-                />
-                <Text
-                  className="font-semibold text-base ml-2"
-                  style={{ color: foreground }}
+              <Animated.View style={animatedStyle}>
+                <Pressable
+                  onPress={saveMovie}
+                  className="flex-row items-center justify-center"
                 >
-                  Watch later
-                </Text>
-              </Pressable>
+                  <Save2
+                    size={20}
+                    color={foreground}
+                    variant={saved ? "Bold" : "Linear"}
+                  />
+                  <Text
+                    className="font-semibold text-base ml-2"
+                    style={{ color: foreground }}
+                  >
+                    Watch later
+                  </Text>
+                </Pressable>
+              </Animated.View>
             </BlurView>
           </View>
 

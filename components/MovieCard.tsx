@@ -1,4 +1,5 @@
 import { icons } from "@/constants/icons";
+import { SavedMovie } from "@/store";
 import { useTheme } from "@/theme/ThemeProvider";
 import { Link } from "expo-router";
 import React from "react";
@@ -10,7 +11,7 @@ const MovieCard = ({
   title,
   vote_average,
   release_date,
-}: Movie) => {
+}: Movie | SavedMovie) => {
   const { foreground } = useTheme();
   return (
     <Link href={`/movies/${id}`} asChild>
@@ -37,7 +38,7 @@ const MovieCard = ({
         <View className="flex-row items-center justify-start gap-x-1">
           <Image source={icons.star} className="size-4" />
           <Text className="text-xs font-bold" style={{ color: foreground }}>
-            {Math.round(vote_average / 2)}
+            {Math.round((vote_average ?? 0) / 2)}
           </Text>
         </View>
 
