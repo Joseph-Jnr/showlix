@@ -18,7 +18,8 @@
         "monochromeImage": "./assets/icons/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.josephjnr.showlix"
     },
     "web": {
       "output": "static",
@@ -39,6 +40,14 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "38520694-7f4e-4bf2-8e4d-7fae8c330777"
+      }
+    },
+    "owner": "josephjnr",
+    "jsEngine": "hermes"
   }
 }
